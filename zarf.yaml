@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: postgres-database
+  description: "Deploy a postgres database using the Zalando PostgreSQL Operator"
+  # x-release-please-start-version
+  version: "0.1.4"
+  # x-release-please-end
+
+variables:
+  - name: DATABASE_NAMESPACE
+    default: default
+  - name: INSTANCES
+    default: 1
+  - name: TEAM_ID
+    default: acid
+  - name: SUPERUSER
+    default: postgres
+  - name: DBNAME
+    default: example
+  - name: VERSION
+    default: 15
+  - name: SIZE
+    default: 1Gi
+  - name: CONSUMER_NAME
+    default: downstream
+  - name: CONSUMER_NAMESPACE
+    default: default
+
+components:
+  - name: postgres-database
+    required: true
+    charts:
+    - name: postgres
+      version: 0.1.0
+      namespace: postgres-operator
+      localPath: charts/postgres
+      valuesFiles:
+        - values/values.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: ./zarf tools wait-for pod spilo-role=master Ready -n ${ZARF_VAR_DATABASE_NAMESPACE} --timeout 90s
+      onRemove:
+        after:
+          - cmd: ./zarf tools kubectl delete ns ${ZARF_VAR_DATABASE_NAMESPACE} --timeout 15m

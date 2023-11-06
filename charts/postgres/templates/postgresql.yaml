@@ -1,0 +1,24 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: {{ include "postgres.fullname" . }}-{{ .Values.dbname }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  dockerImage: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+  teamId: "{{ .Values.teamId }}"
+  numberOfInstances: {{ .Values.numberOfInstances }}
+  users:
+    {{ .Values.consumer.namespace }}.{{ .Values.superuser }}: # database owner
+    - superuser
+    - createdb
+    foo_user: []  # role for application foo
+  databases:
+    {{ .Values.dbname }}: {{ .Values.consumer.namespace }}.{{ .Values.superuser }}  # dbname: owner
+  # preparedDatabases:
+  #   bar: {}
+  postgresql:
+    version: "{{ .Values.version}}"
+  volume:
+    size: "{{ .Values.size }}"

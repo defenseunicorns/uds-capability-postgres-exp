@@ -1,0 +1,21 @@
+namespace: ###ZARF_VAR_DATABASE_NAMESPACE###
+
+# Database spec
+numberOfInstances: ###ZARF_VAR_INSTANCES###
+teamId: ###ZARF_VAR_TEAM_ID###
+superuser: ###ZARF_VAR_SUPERUSER###
+dbname: ###ZARF_VAR_DBNAME###
+version: ###ZARF_VAR_VERSION### # Postgres database version. Ex; 12, 13, 14, 15
+size: ###ZARF_VAR_SIZE###
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ghcr.io/zalando/spilo-15
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "3.0-p1"
+
+consumer:
+  name: ###ZARF_VAR_CONSUMER_NAME###
+  namespace: ###ZARF_VAR_CONSUMER_NAMESPACE###
