@@ -4,28 +4,30 @@ metadata:
   name: postgres-database
   description: "Deploy a postgres database using the Zalando PostgreSQL Operator"
   # x-release-please-start-version
-  version: "0.1.4"
+  version: "0.1.6"
   # x-release-please-end
 
 variables:
-  - name: DATABASE_NAMESPACE
+  - name: NAME
+    default: postgres
+  - name: POSTGRES_DB_NAMESPACE
     default: default
+  - name: POSTGRES_APP_NAME
+    default: downstream
+  - name: POSTGRES_APP_NAMESPACE
+    default: default
+  - name: POSTGRES_USER
+    default: postgres
+  - name: POSTGRES_DB
+    default: example
   - name: INSTANCES
     default: 1
   - name: TEAM_ID
     default: acid
-  - name: SUPERUSER
-    default: postgres
-  - name: DBNAME
-    default: example
   - name: VERSION
     default: 15
   - name: SIZE
     default: 1Gi
-  - name: CONSUMER_NAME
-    default: downstream
-  - name: CONSUMER_NAMESPACE
-    default: default
 
 components:
   - name: postgres-database
@@ -40,7 +42,13 @@ components:
     actions:
       onDeploy:
         after:
-          - cmd: ./zarf tools wait-for pod spilo-role=master Ready -n ${ZARF_VAR_DATABASE_NAMESPACE} --timeout 90s
+          - cmd: ./zarf tools wait-for pod spilo-role=master Ready -n ${ZARF_VAR_POSTGRES_DB_NAMESPACE} --timeout 90s
+          - cmd: echo "${ZARF_VAR_POSTGRES_APP_NAME}"
+            setVariables:
+              - name: POSTGRES_DB_SVC
+          - cmd: echo "${ZARF_VAR_POSTGRES_APP_NAMESPACE}.${ZARF_VAR_POSTGRES_APP_NAME}.${ZARF_VAR_NAME}-${ZARF_VAR_POSTGRES_DB}.credentials.postgresql.acid.zalan.do"
+            setVariables:
+              - name: POSTGRES_DB_SECRET
       onRemove:
         after:
-          - cmd: ./zarf tools kubectl delete ns ${ZARF_VAR_DATABASE_NAMESPACE} --timeout 15m
+          - cmd: ./zarf tools kubectl delete ns ${ZARF_VAR_POSTGRES_DB_NAMESPACE} --timeout 15m

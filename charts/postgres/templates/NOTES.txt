@@ -2,11 +2,11 @@
 
 With a `port-forward` on one of the database pods you can connect to the PostgreSQL cluster.
 
-export PGMASTER=$(kubectl get pods -o jsonpath={.items..metadata.name} -l application=spilo,cluster-name={{ include "postgres.fullname" . }}-{{ .Values.dbname }},spilo-role=master -n default)
+export PGMASTER=$(kubectl get pods -o jsonpath={.items..metadata.name} -l application=spilo,cluster-name={{ .Values.name }}-{{ .Values.dbname }},spilo-role=master -n default)
 kubectl port-forward $PGMASTER 6432:5432 -n default
 
 2. Connect to the Postgres cluster via psql
 
-export PGPASSWORD=$(kubectl get secret postgres.{{ include "postgres.fullname" . }}-{{ .Values.dbname }}.credentials.postgresql.{{ .Values.teamId }}.zalan.do -o 'jsonpath={.data.password}' | base64 -d)
+export PGPASSWORD=$(kubectl get secret postgres.{{ .Values.name }}-{{ .Values.dbname }}.credentials.postgresql.{{ .Values.teamId }}.zalan.do -o 'jsonpath={.data.password}' | base64 -d)
 export PGSSLMODE=require
 psql -U postgres -h localhost -p 6432

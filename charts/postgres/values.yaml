@@ -11,8 +11,7 @@ dbname: example
 version: 15 # Postgres database version. Ex; 12, 13, 14, 15
 size: 1Gi
 
-nameOverride: ""
-fullnameOverride: ""
+name: "postgres"
 
 image:
   repository: ghcr.io/zalando/spilo-15

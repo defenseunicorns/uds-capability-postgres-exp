@@ -5,4 +5,4 @@ metadata:
   namespace: {{ .Values.consumer.namespace }}
 spec:
   type: ExternalName
-  externalName: {{ include "postgres.fullname" . }}-{{ .Values.dbname }}.{{ .Values.namespace }}.svc.cluster.local
+  externalName: {{ .Values.name }}-{{ .Values.dbname }}.{{ .Values.namespace }}.svc.cluster.local

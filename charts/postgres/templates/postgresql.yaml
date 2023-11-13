@@ -1,7 +1,7 @@
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: {{ include "postgres.fullname" . }}-{{ .Values.dbname }}
+  name: {{ .Values.name }}-{{ .Values.dbname }}
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "postgres.labels" . | nindent 4 }}
@@ -15,7 +15,7 @@ spec:
     - createdb
     foo_user: []  # role for application foo
   databases:
-    {{ .Values.dbname }}: {{ .Values.consumer.namespace }}.{{ .Values.superuser }}  # dbname: owner
+    {{ .Values.dbname }}: {{ .Values.superuser }}  # dbname: owner
   # preparedDatabases:
   #   bar: {}
   postgresql:
