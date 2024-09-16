@@ -1,0 +1,24 @@
+# Default values for postgres.
+# This is a YAML-formatted file.
+
+namespace: default
+
+# Database spec
+numberOfInstances: 1
+teamId: acid
+superuser: postgres
+dbname: example
+version: 15 # Postgres database version. Ex; 12, 13, 14, 15
+size: 1Gi
+
+name: "postgres"
+
+image:
+  repository: ghcr.io/zalando/spilo-15
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "3.0-p1"
+
+# Consumer Service
+consumer:
+  name: downstream
+  namespace: default

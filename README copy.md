@@ -11,9 +11,9 @@
 
 ***
 
-# uds-capability-postgres-exp
+# [CAPABILITY REPOSITORY NAME]
 
-PostgreSQL Operator
+[Short description]
 
 ## Prerequisites
 
